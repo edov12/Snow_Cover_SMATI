@@ -1,0 +1,41 @@
+# an example parameter file that searches for and lists URLs to MODIS
+# collection 5 1km L1B files over Indonesia for Aug 1, 2008.
+#
+# Use the following command:
+#    order_MWS.pl -f test_list
+# or you can accomplish the same thing by typing it all on the command
+# line as follows:
+#    order_MWS.pl -c 5 -t "Aug 1, 2008 00:00:00" -u "Aug 1, 2008 23:59:59" -n 5.0 -w 100.0 -s -10.0 -e 125.0 -to_do list MOD021KM MYD021KM
+#
+# NOTES:
+# 1] you can type the parameters in any order
+# 2] parameter values containing spaces or commas (like date time)
+#    should be quoted so that the parameter gets passed to the script
+#    as one string value
+# 3] you can use either the long or short form of the parameter name. I prefer
+#    long name in parameter file (it is more readable), and short name on
+#    command line (less typing to mess up)
+# 4] anything following a "#" character on a line in a parameter file is
+#    ignored (treated as a comment) until the beginning of the next line
+# 5] in a parameter file, you can put parameters on separate lines, indent
+#    with extra whitespace, or format almost any way you want.
+# 6] parameter files must be simple text files (no MS WORD documents or PDF!)
+
+--collection 6
+
+# time period in which to search for files
+--start_time "Aug 1, 2008 00:00:00"
+--end_time "Aug 1, 2008 23:59:59"
+
+# area of interest (degrees)
+--north_bound    5.0
+--west_bound   100
+--south_bound  -10
+--east_bound   125.0
+
+# list URLs to files
+--to_do list
+
+# the products we want
+MOD021KM
+MYD021KM
