@@ -1,0 +1,2 @@
+# Add the parameters to make a subseting from MODIS Images
+# 
