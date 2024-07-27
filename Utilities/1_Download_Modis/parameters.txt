@@ -1,8 +1,8 @@
-# Add the parameters to make a subseting from MODIS Images
-# For this we used a NASA MODIS Script we used the script “order_MWS.pl”, available from: https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/, accessed on 8 August 2023
-# You need <your_account> of EARTHDATA / NASA
-# MODIS Collection version: recomendation: 61
-# Example: your_account year north   south   west    east    stat_time   end_time    format  projection
-# ParameterList:
-ingeofa@gmail.com   2015    -53 -53.4   -71.6   -70.8    "Sep 25, 2015 00:00:00"      "Sep 25, 2015 23:59:59"   tiff    GEO
-perl order_MWS.pl -a ingeofa@gmail.com -c 61 -t "Sep 25, 2015 00:00:00" -u "Sep 25, 2015 23:59:59" -resample Nearest,Mosaic -format tiff -n -53 -w -71.6 -s -53.4 -e -70.8 -proj GEO -to_do post-process "MOD09GA___sur_refl_b01_1" "MOD09GA___sur_refl_b02_1" "MOD09GA___sur_refl_b03_1" "MOD09GA___sur_refl_b04_1" "MOD09GA___sur_refl_b05_1" "MOD09GA___sur_refl_b06_1" "MOD09GA___sur_refl_b07_1" "MOD09GA___SolarZenith_1" "MOD09GQ___sur_refl_b01_1" "MOD09GQ___sur_refl_b02_1" "MOD35_L2___Cloud_Mask"
+#Add the parameters to make a subsetting from MODIS Images
+#For this we used a NASA MODIS Script we used the script “order_MWS.pl”, available from: https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/, accessed on 8 August 2023
+#You need <your_account> of EARTHDATA / NASA
+#MODIS Collection version: recommendation: 61
+#Example: your_account year north   south   west    east    stat_time   end_time    format  projection
+#ParameterList:
+ingeofa@gmail.com	2015	-53	-53.4	-71.6	-70.8	Sep 25	Sep 25	tiff	GEO
+#perl order_MWS.pl -a ingeofa@gmail.com -c 61 -t "Sep 25, 2015 00:00:00" -u "Sep 25, 2015 23:59:59" -resample Nearest,Mosaic -format tiff -n -53 -w -71.6 -s -53.4 -e -70.8 -proj GEO -to_do post-process "MOD09GA___sur_refl_b01_1" "MOD09GA___sur_refl_b02_1" "MOD09GA___sur_refl_b03_1" "MOD09GA___sur_refl_b04_1" "MOD09GA___sur_refl_b05_1" "MOD09GA___sur_refl_b06_1" "MOD09GA___sur_refl_b07_1" "MOD09GA___SolarZenith_1" "MOD09GQ___sur_refl_b01_1" "MOD09GQ___sur_refl_b02_1" "MOD35_L2___Cloud_Mask"
