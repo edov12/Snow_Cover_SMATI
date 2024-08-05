@@ -4,7 +4,7 @@
 >## To Download the order requested:
 **Run in the terminal:**
 
-    python laads-data-download.py -s <URL> -d <DIR>
+    python laads-data-download.py -s <URL> -d <DIR> -t <TOK>
 1. -s URL, --source URL  Recursively download files at URL, i.e.: *https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/50226xxxx/*
 2. -d DIR, --destination DIR, Store directory structure in DIR
 3. -t TOK, --token TOK   Use app token TOK to authenticate form [Generate a Bearer Token](https://urs.earthdata.nasa.gov/users/)
