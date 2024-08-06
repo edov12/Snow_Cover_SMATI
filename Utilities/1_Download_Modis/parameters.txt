@@ -8,4 +8,3 @@
 init_year:	2015
 final_year:	2015
 ingeofa@gmail.com	-53	-53.4	-71.6	-70.8	Sep 25	Sep 25	tiff	GEO
-#perl order_MWS.pl -a ingeofa@gmail.com -c 61 -t "Sep 25, 2015 00:00:00" -u "Sep 25, 2015 23:59:59" -resample Nearest,Mosaic -format tiff -n -53 -w -71.6 -s -53.4 -e -70.8 -proj GEO -to_do post-process "MOD09GA___sur_refl_b01_1" "MOD09GA___sur_refl_b02_1" "MOD09GA___sur_refl_b03_1" "MOD09GA___sur_refl_b04_1" "MOD09GA___sur_refl_b05_1" "MOD09GA___sur_refl_b06_1" "MOD09GA___sur_refl_b07_1" "MOD09GA___SolarZenith_1" "MOD09GQ___sur_refl_b01_1" "MOD09GQ___sur_refl_b02_1" "MOD35_L2___Cloud_Mask"
