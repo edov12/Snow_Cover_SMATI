@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
         
     else:
-        print('dos años')
+        #print('dos años')
         
         
         years = []
