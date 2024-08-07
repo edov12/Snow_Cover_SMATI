@@ -1,9 +1,10 @@
-### Prueba Script downscaling
+### Script downscaling
 
-## Downscaling Usando Atakrig
+## Downscaling Using Atakrig package
 library(raster)
+library(terra)
 #library(rgdal)
-library('rgdal',lib.loc = '/home/faguirre/paquetes/library')
+#library('rgdal',lib.loc = '/home/faguirre/paquetes/library')
 
 # Implementa sobre un raster la funcion dem_z ()
 Z_r = function(n){
@@ -16,12 +17,12 @@ Z_r = function(n){
 library(nlme) # to gls models
 library(gstat) # to variagram
 library(atakrig)
-library(modiscloud)
+#library(modiscloud) / revisar!!
 
 
 ## Downscaling Implementing
 # open files
-year <- '2002'
+year <- '2015'
 #link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
 link <- '/home/faguirre/Data_modis/Order_files/Brunswick/'
 setwd(link)
