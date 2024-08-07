@@ -1,7 +1,7 @@
 >## This script is for order de data before the main scripts application:
 
 
->## To apply this script:
+>### To apply this script:
 **Run in the terminal:**
 
     python Files_preparation_v2.py -s <source_file> -d <destination_file> -y <year> -n <check_name>
