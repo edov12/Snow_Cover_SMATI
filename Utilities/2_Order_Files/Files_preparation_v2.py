@@ -15,9 +15,9 @@ def _order(source, destination, year, check_name):
     folder_MOD09GQ = 'MOD09GQ'
     folder_MOD35 = 'MOD35'
     #Folder_1 = 'Brunswick_Final'
-    Folder_2 = year
+    #Folder_2 = year
     #Folder_3 = 'Brunswick'
-    archivolec = 'checksums_502266192' # Comment after the test!
+    #archivolec = 'checksums_502266192' # Comment after the test!
 
     File_ord = 'Order_files'
 
@@ -26,26 +26,122 @@ def _order(source, destination, year, check_name):
         source = source_1
         #source_2 = source_1
         source = os.chdir("..")
-        source = os.chdir('./4_Example_Data/Brunswick/'+ year)
+        source = os.chdir('./4_Example_Data/Brunswick/' + year)
         source = os.getcwd()
 
-        source_2 = os.chdir("..")
-        source_2 = os.chdir("..")
-        source_2 = os.chdir("./Order_files/Reflectance_bands")
-        source_2 = os.getcwd()
+        destination = os.chdir("..")
+        destination = os.chdir("..")
+        destination = os.chdir("./Order_files/Brunswick/Reflectance_bands")
+        destination = os.getcwd()
 
 
     
+    path_1 = source + '/' + check_name
 
-    path_1 = source + '/' + archivolec
-
-    path_2 = source_2
+    path_2 = destination
 
     #path_3 = os.path.join(os.path.expanduser('~'), source)
 
-    return print(path_1, path_2)
+    
+
+    file = open(path_1, 'r')
+    linea_file =[]
+
+    narchivos_MOD09GA = []
+    narchivos_MOD09GQ = []
+    narchivos_MOD35 = []
+
+    cont_file = 0
+    #cont_MOD09GQ = 0
+    #cont_MOD35 = 0
+
+    while True:
+        linea = file.readline()  # lee línea
+        a = linea.find('MOD09GA')
+        d = linea.find('MOD09GQ')
+        e = linea.find('MOD35')
+        #print(a)
+        #print(linea)
+
+        if not linea:
+            break  # Si no hay más se rompe bucle
+            #print(linea_h)
+
+        linea_file.append(linea)
+
+        if a >= 0:
+            b = len(linea_file[cont_file])
+
+            c = linea_file[cont_file]
+
+            narchivos_MOD09GA.append(c[a:b - 1])
+
+            # print(narchivos[cont])
+        elif d >= 0:
+            b = len(linea_file[cont_file])
+
+            c = linea_file[cont_file]
+
+            narchivos_MOD09GQ.append(c[d:b - 1])
+    
+        elif e >= 0:
+            b = len(linea_file[cont_file])
+
+            c = linea_file[cont_file]
+
+            narchivos_MOD35.append(c[e:b - 1])
+
+        cont_file = cont_file + 1
+
+    # create sub folders
+    year_dir = os.mkdir(path_2 + '/' + year)
+    MOD09GA_dir = os.mkdir(path_2 + '/' + year + '/MOD09GA')
+    MOD09GQ_dir = os.mkdir(path_2 + '/'+ year+'/MOD09GQ')
+    MOD35_dir = os.mkdir(path_2 + '/' + year + '/MOD35')
+
+    #MOD09GA Files
+    for k in narchivos_MOD09GA:
+        #narchivos_year.append(k)
+        #l = l + 1
+        #print(k)
+        shutil.copy2(source + '/' + k,
+                     path_2 + '/' + year + '/MOD09GA')
+
+    #MOD09GQ Files
+    for j in narchivos_MOD09GQ:
+        #narchivos_year.append(k)
+        #l = l + 1
+        #print(k)
+        shutil.copy2(source + '/' + j, 
+                     path_2 + '/' + year + '/MOD09GQ')
+
+    #MOD35 Files
+    for l in narchivos_MOD35:
+        #narchivos_year.append(k)
+        #l = l + 1
+        #print(k)
+        shutil.copy2(source + '/' + l,
+                     path_2 + '/' + year + '/MOD35')
 
 
+    # write the yearly master files
+    with open(path_2 + '/' + year + '/MOD09GA/'+ year +'_MOD09GA', 'w') as f:
+        f.writelines("%s\n" % lin for lin in narchivos_MOD09GA)
+
+    f.close()
+
+    with open(path_2 + '/'+ year +'/MOD09GQ/'+ year +'_MOD09GQ', 'w') as f:
+        f.writelines("%s\n" % lin for lin in narchivos_MOD09GQ)
+
+    f.close()
+
+    with open(path_2 + '/' + year +'/MOD35/' + year + '_MOD35', 'w') as f:
+        f.writelines("%s\n" % lin for lin in narchivos_MOD35)
+
+    f.close()
+
+    
+    #return print(path_1, path_2)
 
 
 def _main(argv):
@@ -66,10 +162,6 @@ def _main(argv):
     return _order(args.source, args.destination, args.year, args.check_name)
 
 
-
-
-
-
 if __name__ == '__main__':
     try:
         #print('hola')
@@ -85,4 +177,4 @@ if __name__ == '__main__':
         sys.exit(-1) # tells the program to quit
         #print('hola2')
     
-    print('hola')
+    #print('hola')
