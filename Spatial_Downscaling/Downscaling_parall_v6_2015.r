@@ -21,10 +21,22 @@ library(atakrig)
 
 
 ## Downscaling Implementing
+
+## Check the packages and functions!!
 # open files
 year <- '2015'
 #link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
-link <- '/home/faguirre/Data_modis/Order_files/Brunswick/'
+link_1 <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Spatial_Downscaling'
+setwd(link_1)
+link_2 <- getwd()
+setwd('..')
+link_3 <- getwd()
+
+setwd('./Spatial_Downscaling')
+link_4 <- getwd()
+
+  
+link <- '/home/faguirre/Data_modis/Order_files/Brunswick/' ## Revisar este link!!
 setwd(link)
 
 #Out_link <- paste0(link,'/Downscaling_files/',year)
