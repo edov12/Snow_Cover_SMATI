@@ -108,7 +108,7 @@ band_250_nan <- projectRaster(band_250_st, res=250, crs=CRS("EPSG:32719"), metho
 #r2 <- rast(band_250_nan)
 #r3 <- brick(r2)
 
-ext_b <- ext(shape) ## Extract the extencion of shape
+ext_b <- ext(shape) ## Extract the extension of shape
 
 R.250_nan <- crop(rast(band_250_nan), ext_b)
 
@@ -456,15 +456,17 @@ for (k in 1:day_f){
       names(band_500_s) <- c('band_1', 'band_2', 'band_3', 'band_4', 'band_5', 'band_6', 'band_7','Dem_500','slope','aspect', 'Mask')
       
       #reproject to UTM
-      band_250_s_UTM <- projectRaster(band_250_s, res=250, crs=CRS("+init=epsg:32719"), method = 'ngb')
-      band_500_s_UTM <- projectRaster(band_500_s, res=500, crs=CRS("+init=epsg:32719"), method = 'ngb')
+      band_250_s_UTM <- projectRaster(band_250_s, res=250, crs=CRS("EPSG:32719"), method = 'ngb')
+      band_500_s_UTM <- projectRaster(band_500_s, res=500, crs=CRS("EPSG:32719"), method = 'ngb')
       
       # data
       R.500 <- crop(rast(band_500_s_UTM), ext(shape_pol))
       Band_500 <- mask(R.500, shape_pol)
+      Band_500 <- brick(Band_500)
       
-      R.250 <- crop(rast(band_250_s_UTM), ext(shape_pol)) # Extend by ext, and add rast
+      R.250 <- crop(rast(band_250_s_UTM), ext(shape_pol)) # Extend by ext, and add rast function
       Band_250 <- mask(R.250, shape_pol)
+      Band_250 <- brick(Band_250)
       
       Band_500$Dem_500_Z <- Z_r(Band_500$Dem_500)
       Band_250$Dem_500_Z <- Z_r(Band_250$Dem_250)
@@ -667,7 +669,10 @@ for (k in 1:day_f){
       v.fit_b7 <- fit.variogram(V.r7_2, vgm(v_sel_7))
       
       ## Atakrig
-      grid.pred_250 <- discretizeRaster(Band_250$band_1, 200, type = "all") # grilla para la predicción (raster)
+      
+      # raster format:
+      Band_250_sr <- as(Band_250$band_1, "SpatRaster") # is working!
+      grid.pred_250 <- discretizeRaster(Band_250_sr, 200, type = "all") # grilla para la predicción (raster)
       res_500_b3.d_2 <- discretizeRaster(resid_b3_2$layer, 200) # este es el que quiero interpolar
       res_500_b4.d_2 <- discretizeRaster(resid_b4_2$layer, 200)
       res_500_b5.d_2 <- discretizeRaster(resid_b5_2$layer, 200)
