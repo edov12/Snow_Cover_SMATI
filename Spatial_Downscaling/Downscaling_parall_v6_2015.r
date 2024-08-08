@@ -26,23 +26,24 @@ library(atakrig)
 # open files
 year <- '2015'
 #link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
-link_1 <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Spatial_Downscaling'
+link_1 <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Spatial_Downscaling' ## Revisar este link!!
 setwd(link_1)
 link_2 <- getwd()
 setwd('..')
 link_3 <- getwd()
 
-setwd('./Spatial_Downscaling')
+setwd('./Utilities/4_Example_Data/Order_files/Brunswick')
 link_4 <- getwd()
 
   
-link <- '/home/faguirre/Data_modis/Order_files/Brunswick/' ## Revisar este link!!
-setwd(link)
+link <- link_4 
+#setwd(link)
 
 #Out_link <- paste0(link,'/Downscaling_files/',year)
-Out_link <- paste0(link,'/Downscaling_files/',year)
-Out_dir = dir.create(Out_link)
-
+Out_link_1 <- paste0(link,'/Downscaling_files')
+Out_link_2 <- paste0(link,'/Downscaling_files/',year)
+Out_dir_1 <- dir.create(Out_link_1)
+Out_dir <- dir.create(Out_link_2)
 #library(tictoc)
 
 #link_b <- paste0(link,'Reflectance_bands/',year)
@@ -68,7 +69,8 @@ day_year <- vector(mode = "list", length = day_f)
 band_1_250_p <- raster(paste0('Reflectance_bands/',year,'/MOD09GQ/',mod09gq_file[1]))
 band_1_500_p <- raster(paste0('Reflectance_bands/',year,'/MOD09GA/',mod09ga_file[2]))
 
-shape <- readOGR('Cuencas/Cuencas_brunswick_UTM.shp')
+#shape <- readOGR('Cuencas/Cuencas_brunswick_UTM.shp') ## rgdal is discontinued
+shape <- vect('Cuencas/Cuencas_brunswick_UTM.shp') # Here we used terra package
 
 Band_water <- raster('land_water_mask/MOD44W_A2015.tif')
 names(Band_water) <- 'Water'
@@ -99,10 +101,20 @@ dem_500_f <- stack(dem_500,dem_500_t)
 # Define ata-pred con valores NaNs!
 
 band_250_st <- stack(band_1_250_p,dem_250_f) 
-band_250_nan <- projectRaster(band_250_st, res=250, crs=CRS("+init=epsg:32719"), method = 'ngb')
+band_250_nan <- projectRaster(band_250_st, res=250, crs=CRS("EPSG:32719"), method = 'ngb') ## the type of projection has been modified!!
 
-R.250_nan <- crop(band_250_nan, extent(shape))
+
+#r1 <- band_250_nan
+#r2 <- rast(band_250_nan)
+#r3 <- brick(r2)
+
+ext_b <- ext(shape) ## Extract the extencion of shape
+
+R.250_nan <- crop(rast(band_250_nan), ext_b)
+
 Band_250_nan <- mask(R.250_nan, shape)
+Band_250_nan <- brick(Band_250_nan) ## return to rasterlayer object!
+
 names(Band_250_nan) <- c('band','elevation','slope', 'aspect')
 
 nan_band <- Band_250_nan$band * NaN
@@ -448,10 +460,10 @@ for (k in 1:day_f){
       band_500_s_UTM <- projectRaster(band_500_s, res=500, crs=CRS("+init=epsg:32719"), method = 'ngb')
       
       # data
-      R.500 <- crop(band_500_s_UTM, extent(shape_pol))
+      R.500 <- crop(rast(band_500_s_UTM), ext(shape_pol))
       Band_500 <- mask(R.500, shape_pol)
       
-      R.250 <- crop(band_250_s_UTM, extent(shape_pol))
+      R.250 <- crop(rast(band_250_s_UTM), ext(shape_pol)) # Extend by ext, and add rast
       Band_250 <- mask(R.250, shape_pol)
       
       Band_500$Dem_500_Z <- Z_r(Band_500$Dem_500)
