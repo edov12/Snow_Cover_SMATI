@@ -22,7 +22,8 @@ library(atakrig)
 
 ## Downscaling Implementing
 
-## Check the packages and functions!!
+## Check the input and output files!!
+
 # open files
 year <- '2015'
 #link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
