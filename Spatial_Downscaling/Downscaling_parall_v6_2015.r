@@ -119,6 +119,39 @@ names(Band_250_nan) <- c('band','elevation','slope', 'aspect')
 
 nan_band <- Band_250_nan$band * NaN
 
+
+## functions from modiscloud package:
+
+# Convert a byte integer (0-255) to a list of 8 bits
+byteint2bit <- function(intval, reverse=TRUE)
+{
+  require(sfsmisc)		# for digitsBase
+  
+  if (reverse == TRUE)
+  {
+    byte_in_binary = rev(t(digitsBase(intval, base= 2, 8)))
+  } else {
+    byte_in_binary = c(t(digitsBase(intval, base= 2, 8)))
+  }
+  return(byte_in_binary)
+}
+
+
+# Get the value of a particular bit in a byte
+
+extract_bit <- function(intval, bitnum)
+{
+  require(sfsmisc)		# for digitsBase
+  
+  # Convert to binary, read correctly (MODIS reads right-to-left)
+  binval = rev(t(digitsBase(intval, base= 2, 8)))
+  
+  bitval = binval[bitnum]
+  return(bitval)
+}
+
+
+
 ## Implement the.....
 d1 <- 0
 for (k in 1:day_f){
@@ -670,14 +703,25 @@ for (k in 1:day_f){
       
       ## Atakrig
       
-      # raster format:
-      Band_250_sr <- as(Band_250$band_1, "SpatRaster") # is working!
+      # raster format Rasterlayer (raster) to SpatRaster (Terra):
+      #Band_250_sr <- as(Band_250$band_1, "SpatRaster") # is working!
+      Band_250_sr <- rast(Band_250$band_1) # working
       grid.pred_250 <- discretizeRaster(Band_250_sr, 200, type = "all") # grilla para la predicción (raster)
-      res_500_b3.d_2 <- discretizeRaster(resid_b3_2$layer, 200) # este es el que quiero interpolar
-      res_500_b4.d_2 <- discretizeRaster(resid_b4_2$layer, 200)
-      res_500_b5.d_2 <- discretizeRaster(resid_b5_2$layer, 200)
-      res_500_b6.d_2 <- discretizeRaster(resid_b6_2$layer, 200)
-      res_500_b7.d_2 <- discretizeRaster(resid_b7_2$layer, 200)
+      
+      res_500_b3.d_2_sr <- rast(resid_b3_2$layer)
+      res_500_b3.d_2 <- discretizeRaster(res_500_b3.d_2_sr, 200) # este es el que quiero interpolar
+      
+      res_500_b4.d_2_sr <- rast(resid_b4_2$layer)
+      res_500_b4.d_2 <- discretizeRaster(res_500_b4.d_2_sr, 200)
+      
+      res_500_b5.d_2_sr <- rast(resid_b5_2$layer)
+      res_500_b5.d_2 <- discretizeRaster(res_500_b5.d_2_sr, 200)
+      
+      res_500_b6.d_2_sr <- rast(resid_b6_2$layer)
+      res_500_b6.d_2 <- discretizeRaster(res_500_b6.d_2_sr, 200)
+      
+      res_500_b7.d_2_sr <- rast(resid_b7_2$layer)
+      res_500_b7.d_2 <- discretizeRaster(res_500_b7.d_2_sr, 200)
       
       ## Control de error: Error in { : 
       #task 1 failed - "dims [product 16] do not match the length of object [1]"
