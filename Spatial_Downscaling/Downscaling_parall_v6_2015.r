@@ -1,8 +1,13 @@
+#!/usr/local/bin/R
+
 ### Script downscaling
 
-## Downscaling Using Atakrig package
 library(raster)
 library(terra)
+library(optparse)
+
+
+
 #library(rgdal)
 #library('rgdal',lib.loc = '/home/faguirre/paquetes/library')
 
@@ -24,27 +29,50 @@ library(atakrig)
 
 ## Check the input and output files!!
 
-# open files
-year <- '2015'
-#link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
-link_1 <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Spatial_Downscaling' ## Revisar este link!!
-setwd(link_1)
-link_2 <- getwd()
-setwd('..')
-link_3 <- getwd()
+option_list = list(
+  make_option(c("-s", "--source"), type="character", default="Brunswick", 
+              help="folder name of the images source [default= %default]", metavar="character"),
+  make_option(c("-y", "--year"), type="integer", default=NULL, 
+              help="year to process", metavar="character")
+  #make_option(c("-h", "--help"), type="character", default=NULL, 
+  #help="include parameters", metavar="character")
+) 
 
-setwd('./Utilities/4_Example_Data/Order_files/Brunswick')
-link_4 <- getwd()
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
+
+source_t <- opt$source
+
+#source_t <- 'Brunswick'
+setwd('..')
+getwd()
+setwd(paste0('./Outputs/Order_files/', source_t))
+
+year <- opt$year
+
+
+# open files
+#year <- opt$year
+#link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
+
+#link_1 <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Spatial_Downscaling' ## Revisar este link!!
+#setwd(link_1)
+#link_2 <- getwd()
+#setwd('..')
+#link_3 <- getwd()
+
+#setwd('./Outputs/Order_files/Brunswick')
+#link_4 <- getwd()
 
   
-link <- link_4 
+link <- getwd() # Set source folder
 #setwd(link)
 
-#Out_link <- paste0(link,'/Downscaling_files/',year)
-Out_link_1 <- paste0(link,'/Downscaling_files')
-Out_link_2 <- paste0(link,'/Downscaling_files/',year)
-Out_dir_1 <- dir.create(Out_link_1)
-Out_dir <- dir.create(Out_link_2)
+Out_link <- paste0(link,'/Downscaling_files/',year) # set output location / default is in Outputs File
+#Out_link_1 <- paste0(link,'/Downscaling_files')
+#Out_link_2 <- paste0(link,'/Downscaling_files/',year)
+#Out_dir_1 <- dir.create(Out_link_1)
+Out_dir <- dir.create(Out_link)
 #library(tictoc)
 
 #link_b <- paste0(link,'Reflectance_bands/',year)

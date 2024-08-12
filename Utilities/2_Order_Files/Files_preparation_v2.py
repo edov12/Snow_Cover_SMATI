@@ -31,7 +31,9 @@ def _order(source, destination, year, check_name):
 
         destination = os.chdir("..")
         destination = os.chdir("..")
-        destination = os.chdir("./Order_files/Brunswick/Reflectance_bands")
+        destination = os.chdir("..")
+        destination = os.chdir("..")
+        destination = os.chdir("./Outputs/Order_files/Brunswick/Reflectance_bands")
         destination = os.getcwd()
 
 
