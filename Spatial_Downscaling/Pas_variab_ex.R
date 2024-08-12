@@ -16,8 +16,11 @@ opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
 
 source_t <- opt$source
+
+source_t <- 'Brunswick'
 setwd('..')
-setwd('./Outputs/Order_files/' + source_t)
+getwd()
+setwd(paste0('./Outputs/Order_files/', source_t))
 year <- opt$year
 
 
