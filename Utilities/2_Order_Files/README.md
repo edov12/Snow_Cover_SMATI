@@ -11,6 +11,8 @@
 - also you can put only '.' if you want to use the example files
 2. -d DIR, destination DIR, 
 - the path to the place to order your files
-- also you can put only '.' if you want to use the example files
+- also you can put only 'Brunswick' if you want to use the example files
+- important to note that the outputs are placed in the folder ./Outputs/Order_files/*<destination_file>*/Reflectance_bands
+- so this subfolder must be created inside the destination directory
 3. -y YEAR, year YEAR, the year that you need to process
 4. -n check_name, checksums name file that has all the record files downloaded
