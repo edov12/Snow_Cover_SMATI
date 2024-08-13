@@ -14,5 +14,5 @@
 - also you can put only 'Brunswick' if you want to use the example files
 - important to note that the outputs are placed in the folder ./Outputs/Order_files/*<destination_file>*/Reflectance_bands
 - so this sub-folder must be created inside this destination directory
-3. -y YEAR, year YEAR, the year that you need to process
+3. -y YEAR, year, the year that you need to process
 4. -n check_name, checksums name file that has all the record files downloaded
