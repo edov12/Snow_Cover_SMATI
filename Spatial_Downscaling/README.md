@@ -1,4 +1,4 @@
-## This script is apply the Spatial Downscaling to your files:
+## This script is to apply the Spatial Downscaling into your files:
 
 
 ### To apply this script:
