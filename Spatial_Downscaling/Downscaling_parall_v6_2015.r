@@ -1,8 +1,13 @@
+#!/usr/local/bin/R
+
 ### Script downscaling
 
-## Downscaling Using Atakrig package
 library(raster)
 library(terra)
+library(optparse)
+
+
+
 #library(rgdal)
 #library('rgdal',lib.loc = '/home/faguirre/paquetes/library')
 
@@ -21,16 +26,53 @@ library(atakrig)
 
 
 ## Downscaling Implementing
+
+## Check the input and output files!!
+
+option_list = list(
+  make_option(c("-s", "--source"), type="character", default="Brunswick", 
+              help="folder name of the images source [default= %default]", metavar="character"),
+  make_option(c("-y", "--year"), type="integer", default=NULL, 
+              help="year to process", metavar="character")
+  #make_option(c("-h", "--help"), type="character", default=NULL, 
+  #help="include parameters", metavar="character")
+) 
+
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
+
+source_t <- opt$source
+
+#source_t <- 'Brunswick'
+setwd('..')
+getwd()
+setwd(paste0('./Outputs/Order_files/', source_t))
+
+year <- opt$year
+
+
 # open files
-year <- '2015'
+#year <- opt$year
 #link <- '~/Documents/Data/Data_modis/Order_files/Brunswick/'
-link <- '/home/faguirre/Data_modis/Order_files/Brunswick/'
-setwd(link)
 
-#Out_link <- paste0(link,'/Downscaling_files/',year)
-Out_link <- paste0(link,'/Downscaling_files/',year)
-Out_dir = dir.create(Out_link)
+#link_1 <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Spatial_Downscaling' ## Revisar este link!!
+#setwd(link_1)
+#link_2 <- getwd()
+#setwd('..')
+#link_3 <- getwd()
 
+#setwd('./Outputs/Order_files/Brunswick')
+#link_4 <- getwd()
+
+  
+link <- getwd() # Set source folder
+#setwd(link)
+
+Out_link <- paste0(link,'/Downscaling_files/',year) # set output location / default is in Outputs File
+#Out_link_1 <- paste0(link,'/Downscaling_files')
+#Out_link_2 <- paste0(link,'/Downscaling_files/',year)
+#Out_dir_1 <- dir.create(Out_link_1)
+Out_dir <- dir.create(Out_link)
 #library(tictoc)
 
 #link_b <- paste0(link,'Reflectance_bands/',year)
@@ -56,7 +98,8 @@ day_year <- vector(mode = "list", length = day_f)
 band_1_250_p <- raster(paste0('Reflectance_bands/',year,'/MOD09GQ/',mod09gq_file[1]))
 band_1_500_p <- raster(paste0('Reflectance_bands/',year,'/MOD09GA/',mod09ga_file[2]))
 
-shape <- readOGR('Cuencas/Cuencas_brunswick_UTM.shp')
+#shape <- readOGR('Cuencas/Cuencas_brunswick_UTM.shp') ## rgdal is discontinued
+shape <- vect('Cuencas/Cuencas_brunswick_UTM.shp') # Here we used terra package
 
 Band_water <- raster('land_water_mask/MOD44W_A2015.tif')
 names(Band_water) <- 'Water'
@@ -87,13 +130,56 @@ dem_500_f <- stack(dem_500,dem_500_t)
 # Define ata-pred con valores NaNs!
 
 band_250_st <- stack(band_1_250_p,dem_250_f) 
-band_250_nan <- projectRaster(band_250_st, res=250, crs=CRS("+init=epsg:32719"), method = 'ngb')
+band_250_nan <- projectRaster(band_250_st, res=250, crs=CRS("EPSG:32719"), method = 'ngb') ## the type of projection has been modified!!
 
-R.250_nan <- crop(band_250_nan, extent(shape))
+
+#r1 <- band_250_nan
+#r2 <- rast(band_250_nan)
+#r3 <- brick(r2)
+
+ext_b <- ext(shape) ## Extract the extension of shape
+
+R.250_nan <- crop(rast(band_250_nan), ext_b)
+
 Band_250_nan <- mask(R.250_nan, shape)
+Band_250_nan <- brick(Band_250_nan) ## return to rasterlayer object!
+
 names(Band_250_nan) <- c('band','elevation','slope', 'aspect')
 
 nan_band <- Band_250_nan$band * NaN
+
+
+## functions from modiscloud package:
+
+# Convert a byte integer (0-255) to a list of 8 bits
+byteint2bit <- function(intval, reverse=TRUE)
+{
+  require(sfsmisc)		# for digitsBase
+  
+  if (reverse == TRUE)
+  {
+    byte_in_binary = rev(t(digitsBase(intval, base= 2, 8)))
+  } else {
+    byte_in_binary = c(t(digitsBase(intval, base= 2, 8)))
+  }
+  return(byte_in_binary)
+}
+
+
+# Get the value of a particular bit in a byte
+
+extract_bit <- function(intval, bitnum)
+{
+  require(sfsmisc)		# for digitsBase
+  
+  # Convert to binary, read correctly (MODIS reads right-to-left)
+  binval = rev(t(digitsBase(intval, base= 2, 8)))
+  
+  bitval = binval[bitnum]
+  return(bitval)
+}
+
+
 
 ## Implement the.....
 d1 <- 0
@@ -432,15 +518,17 @@ for (k in 1:day_f){
       names(band_500_s) <- c('band_1', 'band_2', 'band_3', 'band_4', 'band_5', 'band_6', 'band_7','Dem_500','slope','aspect', 'Mask')
       
       #reproject to UTM
-      band_250_s_UTM <- projectRaster(band_250_s, res=250, crs=CRS("+init=epsg:32719"), method = 'ngb')
-      band_500_s_UTM <- projectRaster(band_500_s, res=500, crs=CRS("+init=epsg:32719"), method = 'ngb')
+      band_250_s_UTM <- projectRaster(band_250_s, res=250, crs=CRS("EPSG:32719"), method = 'ngb')
+      band_500_s_UTM <- projectRaster(band_500_s, res=500, crs=CRS("EPSG:32719"), method = 'ngb')
       
       # data
-      R.500 <- crop(band_500_s_UTM, extent(shape_pol))
+      R.500 <- crop(rast(band_500_s_UTM), ext(shape_pol))
       Band_500 <- mask(R.500, shape_pol)
+      Band_500 <- brick(Band_500)
       
-      R.250 <- crop(band_250_s_UTM, extent(shape_pol))
+      R.250 <- crop(rast(band_250_s_UTM), ext(shape_pol)) # Extend by ext, and add rast function
       Band_250 <- mask(R.250, shape_pol)
+      Band_250 <- brick(Band_250)
       
       Band_500$Dem_500_Z <- Z_r(Band_500$Dem_500)
       Band_250$Dem_500_Z <- Z_r(Band_250$Dem_250)
@@ -643,12 +731,26 @@ for (k in 1:day_f){
       v.fit_b7 <- fit.variogram(V.r7_2, vgm(v_sel_7))
       
       ## Atakrig
-      grid.pred_250 <- discretizeRaster(Band_250$band_1, 200, type = "all") # grilla para la predicción (raster)
-      res_500_b3.d_2 <- discretizeRaster(resid_b3_2$layer, 200) # este es el que quiero interpolar
-      res_500_b4.d_2 <- discretizeRaster(resid_b4_2$layer, 200)
-      res_500_b5.d_2 <- discretizeRaster(resid_b5_2$layer, 200)
-      res_500_b6.d_2 <- discretizeRaster(resid_b6_2$layer, 200)
-      res_500_b7.d_2 <- discretizeRaster(resid_b7_2$layer, 200)
+      
+      # raster format Rasterlayer (raster) to SpatRaster (Terra):
+      #Band_250_sr <- as(Band_250$band_1, "SpatRaster") # is working!
+      Band_250_sr <- rast(Band_250$band_1) # working
+      grid.pred_250 <- discretizeRaster(Band_250_sr, 200, type = "all") # grilla para la predicción (raster)
+      
+      res_500_b3.d_2_sr <- rast(resid_b3_2$layer)
+      res_500_b3.d_2 <- discretizeRaster(res_500_b3.d_2_sr, 200) # este es el que quiero interpolar
+      
+      res_500_b4.d_2_sr <- rast(resid_b4_2$layer)
+      res_500_b4.d_2 <- discretizeRaster(res_500_b4.d_2_sr, 200)
+      
+      res_500_b5.d_2_sr <- rast(resid_b5_2$layer)
+      res_500_b5.d_2 <- discretizeRaster(res_500_b5.d_2_sr, 200)
+      
+      res_500_b6.d_2_sr <- rast(resid_b6_2$layer)
+      res_500_b6.d_2 <- discretizeRaster(res_500_b6.d_2_sr, 200)
+      
+      res_500_b7.d_2_sr <- rast(resid_b7_2$layer)
+      res_500_b7.d_2 <- discretizeRaster(res_500_b7.d_2_sr, 200)
       
       ## Control de error: Error in { : 
       #task 1 failed - "dims [product 16] do not match the length of object [1]"
