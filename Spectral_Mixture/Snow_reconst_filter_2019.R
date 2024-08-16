@@ -6,16 +6,31 @@ library(RStoolbox)
 library(openxlsx)
 library(tictoc)
 
-year <- '2019'
-#link <- '/home/franciscoaguirre/Documents/Scripts/Scripts_R/Endmenmers/Snow_unmixing_v1'
-link <- '/home/franciscoaguirre/Documents/Data/Data_modis/Order_files/Brunswick/Downscaling'
-setwd(link)
-#Out_link <- 'Brunswick_mesma_albedo'
+library(optparse)
+
+option_list = list(
+  make_option(c("-n", "--name"), type="character", default="Brunswick", 
+              help="folder name of the downscaled images [default= %default]", metavar="character"),
+  make_option(c("-y", "--year"), type="integer", default=NULL, 
+              help="year to process", metavar="character")
+  #make_option(c("-h", "--help"), type="character", default=NULL, 
+  #help="include parameters", metavar="character")
+) 
+
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
+
+source_t <- opt$name
+
+#source_t <- 'Brunswick'
+setwd('..')
+getwd()
+setwd(paste0('./Outputs/Order_files/', source_t,'/Downscaling_files'))
+
+year <- opt$year
 
 Out_link <- paste0(link,'/Brunswick_mesma_albedo/',year)
 Out_dir = dir.create(Out_link)
-
-#setwd('~/Documents/Data/Data_modis/Brunswick/endmembers/')
 
 down_file <- readLines(paste0('Brunswick_down/',year,'/',year,'_downcaling.txt'))
 
@@ -24,10 +39,17 @@ day <- length(down_file)
 day_mesma <- vector(mode = "list", length = day)
 
 # Read spectral signatures (0-100)
-data_sp <- read.xlsx(paste0('/home/franciscoaguirre/Documents/Scripts/Scripts_R/Endmenmers/Snow_unmixing_v1/',
+setwd('..')
+setwd('..')
+setwd('..')
+setwd('..')
+
+data_sp <- read.xlsx(paste0('./Utilities/4_Example_Data/Snow_unmixing_v1/',
                             'Snows_rock.xlsx'))
 row.names(data_sp) <- data_sp$Land_cover
 fr_1 <- data_sp[1:8,2:8]
+
+############
 
 ## Armar el FOR
 
