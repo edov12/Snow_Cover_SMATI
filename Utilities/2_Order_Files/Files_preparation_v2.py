@@ -10,7 +10,7 @@ import shutil
 DESC = "This script orders the anual downloaded files, from the Earthdata, for the correct execution of the main scripts application"
 
 
-def _order(source, destination, year, check_name):
+def _order(source, dest_1, year, check_name):
     folder_MOD09GA = 'MOD09GA'
     folder_MOD09GQ = 'MOD09GQ'
     folder_MOD35 = 'MOD35'
@@ -21,24 +21,50 @@ def _order(source, destination, year, check_name):
 
     File_ord = 'Order_files'
 
-    if source == '.' and destination == '.':
+    if source == '.':
         source_1 = os.getcwd()
         source = source_1
         #source_2 = source_1
         source = os.chdir("..")
         source = os.chdir('./4_Example_Data/Brunswick/' + year)
         source = os.getcwd()
-
+        
         destination = os.chdir("..")
         destination = os.chdir("..")
-        destination = os.chdir("./Order_files/Brunswick/Reflectance_bands")
+        destination = os.chdir("..")
+        destination = os.chdir("..")
+        #path_d = './Outputs/Order_files/' + destination + '/Reflectance_bands'
+        destination = os.chdir('./Outputs/Order_files/' + dest_1 + '/Reflectance_bands') # destination by default
         destination = os.getcwd()
+        #print(dest_1)
 
-
-    
+        
+    else:
+        #destination = os.chdir("..")
+        #destination = os.chdir("..")
+        destination = os.chdir("..")
+        destination = os.chdir("..")
+        destination = os.chdir('./Outputs/Order_files/' + dest_1 + '/Reflectance_bands') # destination by default
+        destination = os.getcwd()
+        
+        
+        
     path_1 = source + '/' + check_name
 
     path_2 = destination
+    
+    '''
+        #source_1 = os.getcwd()
+        source = source
+        destination = os.chdir("..")
+        destination = os.chdir("..")
+        destination = os.chdir('./Outputs/Order_files/' + destination + '/Reflectance_bands') # destination by default
+        destination = os.getcwd()
+        '''
+
+
+    
+    
 
     #path_3 = os.path.join(os.path.expanduser('~'), source)
 
@@ -140,7 +166,7 @@ def _order(source, destination, year, check_name):
 
     f.close()
 
-    
+
     #return print(path_1, path_2)
 
 
@@ -148,7 +174,7 @@ def _main(argv):
     #parser = argparse.ArgumentParser(description = 'Order Files Script')
     parser = argparse.ArgumentParser(prog=argv[0], description=DESC)
     parser.add_argument('-s', '--source', metavar='DIR', help = 'the input folder path', required=True)
-    parser.add_argument('-d', '--destination', metavar='DIR', help = 'the destination folder path', required=True)
+    parser.add_argument('-d', '--destination', metavar='DIR', help = 'the destination folder name', required=True)
     parser.add_argument('-y', '--year', help = 'year to order', required=True)
     parser.add_argument('-n', '--check_name', help = 'checksums name', required=True)
     #self.inp_path = parser.add_argument('-inp_p', help = "put your input path")
