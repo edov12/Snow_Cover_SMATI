@@ -1,6 +1,4 @@
-## Prueba de reconstrucción de nieve y filtros
-
-## MESMA Spectral unmixing
+## MESMA Spectral unmixing and filters
 
 #load packages
 library(raster)
