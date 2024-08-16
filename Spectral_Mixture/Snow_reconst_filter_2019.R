@@ -22,32 +22,39 @@ opt = parse_args(opt_parser)
 
 source_t <- opt$name
 
-#source_t <- 'Brunswick'
+source_t <- 'Brunswick'
+year <- 2015
+
 setwd('..')
 getwd()
-setwd(paste0('./Outputs/Order_files/', source_t,'/Downscaling_files'))
+link <- paste0('./Outputs/Order_files/', source_t)
+
+link <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Outputs/Order_files/Brunswick'
+
+setwd(link)
 
 year <- opt$year
 
 Out_link <- paste0(link,'/Brunswick_mesma_albedo/',year)
 Out_dir = dir.create(Out_link)
 
-down_file <- readLines(paste0('Brunswick_down/',year,'/',year,'_downcaling.txt'))
+down_file <- readLines(paste0('./Downscaling_files/', year,'/',year,'_downcaling.txt'))
 
 # down file
 day <- length(down_file)
 day_mesma <- vector(mode = "list", length = day)
 
 # Read spectral signatures (0-100)
-setwd('..')
-setwd('..')
-setwd('..')
-setwd('..')
+#setwd('..')
+#setwd('..')
+#setwd('..')
 
-data_sp <- read.xlsx(paste0('./Utilities/4_Example_Data/Snow_unmixing_v1/',
-                            'Snows_rock.xlsx'))
+
+data_sp <- read.xlsx(paste0('./Snow_unmixing_v1/Snows_rock.xlsx'))
 row.names(data_sp) <- data_sp$Land_cover
 fr_1 <- data_sp[1:8,2:8]
+
+#setwd(link)
 
 ############
 
@@ -59,7 +66,7 @@ for(d in 1:length(down_file)){
   day_b_d <- substr(down_file[d], 1, 8)
   day_mesma[d] <- paste0(day_b_d,'_mesma_albedo.tif')
   
-  high_atk_GLS <- brick(paste0('Brunswick_down/',year,'/',down_file[d]))
+  high_atk_GLS <- brick(paste0('./Downscaling_files/',year,'/',down_file[d]))
   #plot(high_atk_GLS)
   names(high_atk_GLS) <- c('band_1','band_2','band_3', 'band_4', 'band_5', 'band_6', 'band_7','elevation',
                            'slope','aspect','zenith','cloud_mask')
