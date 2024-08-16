@@ -7,6 +7,9 @@ import numpy as np
 from io import StringIO
 import subprocess
 
+import argparse
+import sys
+
 
 
 class Parameter_Modis:
@@ -53,18 +56,63 @@ class Parameter_Modis:
         self.end_time = _param_array[6]
         self.format = _param_array[7]
         self.proj = _param_array[8]
-     
         
+        #print(self.north)
+     
+     
+def _main(argv):
+    #parser = argparse.ArgumentParser(description = 'Order Files Script')
+    parser = argparse.ArgumentParser(prog=argv[0], description='parameter file')
+    parser.add_argument('-s', '--source', metavar='DIR', help = 'the parameter file', required=True)
+    #self.inp_path = parser.add_argument('-inp_p', help = "put your input path")
+
+    args = parser.parse_args(argv[1:])
+    
+    '''
+    if not os.path.exists(args.destination):
+        os.makedirs(args.destination)
+    return args.source, args.destination, args.year, args.check_name
+    '''
+    
+    return Parameter_Modis(args.source)
+
+
+
+
+
+     
 if __name__ == "__main__":
-    parameter_file = Parameter_Modis('parameters.txt')
+    
+    '''
+    #print(args.source)
+    #print(sys.argv[0])
+    #parameter_file = _main(sys.argv)
+    
+    #print(parameter_file.end_time)
+    
+    try:
+        sys.exit(_main(sys.argv))
+
+        #print(sys.argv)
+    except KeyboardInterrupt:
+        sys.exit(-1) # tells the program to quit
+        #print('hola2')
+    
+    '''
+    
+    parameter_file = _main(sys.argv)
+    
+    #print(parameter_file.end_time)
     
     n_years = (parameter_file.final_year - parameter_file.init_year) + 1
     
-    print(parameter_file.init_year)
+    print(n_years)
     
     
-    
+
+   
     if n_years == 1:
+        
         
         '''
         print('perl order.pl -a ' + parameter_file.name_account + ' -c 61 -t "' + parameter_file.start_time
@@ -101,22 +149,25 @@ if __name__ == "__main__":
             years.append(parameter_file.init_year + y)
         
         for year in years:
-            #print(i)
+            
+            #print(year)
             
             #res = subprocess.call('perl ./Modis_Script/order_MWS.pl -c 61 -t "Aug 1, ' + str(year) + ' 00:00:00" -u "Aug 1, ' + str(year) + ' 23:59:59" -n 5.0 -w 100.0 -s -10.0 -e 125.0 -to_do list MOD021KM MYD021KM', shell=True)
             #res
             
-            res = subprocess.call('perl ./Modis_Script/order_MWS.pl -a ' + parameter_file.name_account + ' -c 61 -t "' + parameter_file.stat_time
-                  + ', '+ str(parameter_file.year) + ' 00:00:00" -u "' + parameter_file.end_time + ', ' + str(parameter_file.year) + ' 23:59:59" -resample Nearest,Mosaic -format ' +
+            
+            
+            res = subprocess.call('perl ./Modis_Script/order_MWS.pl -a ' + parameter_file.name_account + ' -c 61 -t "' + parameter_file.start_time
+                  + ', '+ str(year) + ' 00:00:00" -u "' + parameter_file.end_time + ', ' + str(year) + ' 23:59:59" -resample Nearest,Mosaic -format ' +
                   parameter_file.format + ' -n ' + str(parameter_file.north) + ' -w ' + str(parameter_file.west) + ' -s ' + str(parameter_file.south) + ' -e ' + str(parameter_file.east) + ' -proj ' +
                   parameter_file.proj + ' -to_do post-process "MOD09GA___sur_refl_b01_1" "MOD09GA___sur_refl_b02_1" "MOD09GA___sur_refl_b03_1" "MOD09GA___sur_refl_b04_1" "MOD09GA___sur_refl_b05_1" "MOD09GA___sur_refl_b06_1" "MOD09GA___sur_refl_b07_1" "MOD09GA___SolarZenith_1"' +
                   ' "MOD09GQ___sur_refl_b01_1" "MOD09GQ___sur_refl_b02_1" "MOD35_L2___Cloud_Mask"', shell=True)
             
             res
         
-        
-    '''
+            
     
+    '''
     res = subprocess.call('perl order.pl -a ' + parameter_file.name_account + ' -c 61 -t "' + parameter_file.stat_time
           + ', '+ str(parameter_file.year) + ' 00:00:00" -u "' + parameter_file.end_time + ', ' + str(parameter_file.year) + ' 23:59:59" -resample Nearest,Mosaic -format' +
           parameter_file.format + ' -n ' + str(parameter_file.north) + ' -w ' + str(parameter_file.west) + ' -s ' + str(parameter_file.south) + ' -e ' + str(parameter_file.east) + ' -proj ' +
@@ -130,6 +181,7 @@ if __name__ == "__main__":
     
     res_1
     res_2
+    
+
     '''
-        
         
