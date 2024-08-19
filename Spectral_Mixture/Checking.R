@@ -95,7 +95,7 @@ zenith_r_f <- zenith_r_v * zenith_r_m
   
 illum_ang <- (zenith_r_f * 0.01) - high_atk_GLS$slope
 
-Snow_st_c <- c(rast(Snow_f), rast(Snow_f_gz), rast(ndsi), rast(madi), rast(high_atk_GLS$cloud_mask), rast(illum_ang)) # funciona!!
+Snow_st_c <- c(Snow_f, Snow_f_gz, rast(ndsi), rast(madi), rast(high_atk_GLS$cloud_mask), rast(illum_ang)) # funciona!!
 
 #Snow_st <- stack(rast(Snow_f), rast(Snow_f_gz), rast(ndsi), rast(madi), rast(high_atk_GLS$cloud_mask), rast(illum_ang)) ## problema!!
 
@@ -134,7 +134,8 @@ for(i in 1:nrow(Snow_st.p.frame)){
     }
   }
 }
-  
+
+
 ## Calculo de albedo
 vis <- 3/7 # fraction of visible bands
 ni <- 4/7 # fraction of NearInfrared bands
@@ -182,20 +183,26 @@ MADI_r <- rasterFromXYZ(Snow_st.p.frame[,4])
 Snow_M <- rasterFromXYZ(Snow_st.p.frame[,7])
 Snow_albedo <- rasterFromXYZ(Snow_st.p.frame[,9])
   
-  Snow_umb_r <- stack(Snow_f_r, Snow_gz_r, NDSI_r, MADI_r, Snow_M, Snow_albedo)
-  crs(Snow_umb_r) <- "+init=epsg:32719"
+
+Snow_umb_r <- stack(Snow_f_r, Snow_gz_r, NDSI_r, MADI_r, Snow_M, Snow_albedo)
+crs(Snow_umb_r) <- "EPSG:32719"
   
   
-  ## Imprimir los raster
-  writeRaster(Snow_umb_r, paste0(Out_link,'/',day_b_d,'_mesma_albedo.tif'), 
-              format="GTiff", overwrite=TRUE)
-  toc()
+## Imprimir los raster
+writeRaster(Snow_umb_r, paste0(Out_link,'/',day_b_d,'_mesma_albedo_2.tif'), 
+            format="GTiff", overwrite=TRUE)
+toc()
   
+plot(Snow_umb_r)
 
 
 
+fileConn<-file(paste0(Out_link,'/',year,'_mesma_alb_2.txt'))
+writeLines(as.character(day_mesma), fileConn)
+close(fileConn)
 
-fileConn<-file(paste0(Out_link,'/',year,'_mesma_alb.txt'))
+## other format:
+fileConn <- file(paste0(Out_link,'/',year,'_mesma_alb.txt'))
 writeLines(as.character(day_mesma), fileConn)
 close(fileConn)
 
