@@ -2,19 +2,19 @@
 
 #load packages
 library(raster)
+library(terra)
 library(RStoolbox)
 library(openxlsx)
 library(tictoc)
 
 library(optparse)
 
+## Terminal variables
 option_list = list(
   make_option(c("-n", "--name"), type="character", default="Brunswick", 
               help="folder name of the downscaled images [default= %default]", metavar="character"),
   make_option(c("-y", "--year"), type="integer", default=NULL, 
               help="year to process", metavar="character")
-  #make_option(c("-h", "--help"), type="character", default=NULL, 
-  #help="include parameters", metavar="character")
 ) 
 
 opt_parser = OptionParser(option_list=option_list)
@@ -22,20 +22,15 @@ opt = parse_args(opt_parser)
 
 source_t <- opt$name
 
-source_t <- 'Brunswick'
-year <- 2015
-
 setwd('..')
-getwd()
-link <- paste0('./Outputs/Order_files/', source_t)
 
-link <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Outputs/Order_files/Brunswick'
+link <- paste0('./Outputs/Order_files/', source_t)
 
 setwd(link)
 
 year <- opt$year
 
-Out_link <- paste0(link,'/Brunswick_mesma_albedo/',year)
+Out_link <- paste0('./Brunswick_mesma_albedo/',year)
 Out_dir = dir.create(Out_link)
 
 down_file <- readLines(paste0('./Downscaling_files/', year,'/',year,'_downcaling.txt'))
@@ -44,21 +39,11 @@ down_file <- readLines(paste0('./Downscaling_files/', year,'/',year,'_downcaling
 day <- length(down_file)
 day_mesma <- vector(mode = "list", length = day)
 
-# Read spectral signatures (0-100)
-#setwd('..')
-#setwd('..')
-#setwd('..')
-
-
-data_sp <- read.xlsx(paste0('./Snow_unmixing_v1/Snows_rock.xlsx'))
+data_sp <- read.xlsx('./Snow_unmixing_v1/Snows_rock.xlsx')
 row.names(data_sp) <- data_sp$Land_cover
 fr_1 <- data_sp[1:8,2:8]
 
-#setwd(link)
-
 ############
-
-## Armar el FOR
 
 for(d in 1:length(down_file)){
   tic()
@@ -70,13 +55,14 @@ for(d in 1:length(down_file)){
   #plot(high_atk_GLS)
   names(high_atk_GLS) <- c('band_1','band_2','band_3', 'band_4', 'band_5', 'band_6', 'band_7','elevation',
                            'slope','aspect','zenith','cloud_mask')
+  #print(1)
   
   high_atk_GLS_f <- stack(high_atk_GLS$band_1, high_atk_GLS$band_2, high_atk_GLS$band_3,
                           high_atk_GLS$band_4, high_atk_GLS$band_5, high_atk_GLS$band_6,
                           high_atk_GLS$band_7)
   
   names(high_atk_GLS_f) <- c('B1_dn', 'B2_dn', 'B3_dn', 'B4_dn', 'B5_dn', 'B6_dn', 'B7_dn')
-  
+  #print(2)
   ## Revisión de bandas NaN
   
   b1_250_m <- cellStats(high_atk_GLS_f$B1_dn, 'mean')
@@ -140,8 +126,13 @@ for(d in 1:length(down_file)){
     
     illum_ang <- (zenith_r_f * 0.01) - high_atk_GLS$slope
     
-    Snow_st <- stack(Snow_f, Snow_f_gz, ndsi, madi, high_atk_GLS$cloud_mask, illum_ang)
-    names(Snow_st) <- c('Snow_f', 'Snow_gz','NDSI','MADI', 'cloud_mask', 'illum_ang')
+    #Snow_st <- stack(Snow_f, Snow_f_gz, ndsi, madi, high_atk_GLS$cloud_mask, illum_ang) ## problem!!
+    #names(Snow_st) <- c('Snow_f', 'Snow_gz','NDSI','MADI', 'cloud_mask', 'illum_ang')
+    Snow_st_c <- c(Snow_f, Snow_f_gz, rast(ndsi), rast(madi), rast(high_atk_GLS$cloud_mask), rast(illum_ang)) ## using terra, only Snow_f and Snow_f_gz are the same
+    names(Snow_st_c) <- c('Snow_f', 'Snow_gz','NDSI','MADI', 'cloud_mask', 'illum_ang')
+    #print(3)
+    
+    Snow_st <- brick(Snow_st_c) # return to raster
     
     ## New snow and cloud descrimination
     Snow_st.p <- as(Snow_st, 'SpatialPointsDataFrame')#
@@ -212,7 +203,7 @@ for(d in 1:length(down_file)){
     
     # Arma el raster
     coordinates(Snow_st.p.frame) <- ~x+y
-    proj4string(Snow_st.p.frame) <- CRS("+init=epsg:32719") # UTM huso 19S WGS84
+    proj4string(Snow_st.p.frame) <- CRS('EPSG:32719') # UTM huso 19S WGS84 !new format!
     
     Snow_f_r <- rasterFromXYZ(Snow_st.p.frame[,1])
     Snow_gz_r <- rasterFromXYZ(Snow_st.p.frame[,2])
@@ -222,7 +213,7 @@ for(d in 1:length(down_file)){
     Snow_albedo <- rasterFromXYZ(Snow_st.p.frame[,9])
     
     Snow_umb_r <- stack(Snow_f_r, Snow_gz_r, NDSI_r, MADI_r, Snow_M, Snow_albedo)
-    crs(Snow_umb_r) <- "+init=epsg:32719"
+    crs(Snow_umb_r) <- "EPSG:32719"
     
     
     ## Imprimir los raster
