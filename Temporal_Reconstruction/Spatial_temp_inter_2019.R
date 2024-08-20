@@ -4,17 +4,6 @@ library(raster)
 library(spacetime) # armar matrices spacio-temporales
 library(tictoc)
 
-#library(dplyr)
-#library(xts)
-
-#library(gstat)
-
-#link <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Outputs/Order_files/Brunswick'
-#setwd(link)
-
-#year_st <- 2015
-
-
 library(optparse)
 
 ## Terminal variables
