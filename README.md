@@ -1,4 +1,5 @@
-# The Snow SMATI, Spatial Fusion / Mixture Analysis / Temporal Interpolation
+# The Snow SMATI 
+## Spatial Fusion / Mixture Analysis / Temporal Interpolation
 
 This work is the responds to practical packaging of the methodology published in the open acces journal [MDPI Remote Sensing](https://www.mdpi.com/journal/remotesensing)
 The paper ***Snow Cover Reconstruction in the Brunswick Peninsula, Patagonia, Derived from a Combination of the Spectral Fusion, Mixture Analysis, and Temporal Interpolation of MODIS Data*** explores and compares different methodologies to implement a high resolution (spatial and temporal) studies of snow cover at high latitudes enviroments.
