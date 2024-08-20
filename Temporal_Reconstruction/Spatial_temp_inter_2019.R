@@ -9,24 +9,46 @@ library(tictoc)
 
 #library(gstat)
 
-link <- '/home/franciscoaguirre/Documents/Data/Data_modis/Order_files/Brunswick/Downscaling'
+#link <- '/Users/fcoj_aguirre/Documents/Articulos en trabajo/Snow_Magallanes/Scripts/Snow_Cover_SMATI/Outputs/Order_files/Brunswick'
+#setwd(link)
+
+#year_st <- 2015
+
+
+library(optparse)
+
+## Terminal variables
+option_list = list(
+  make_option(c("-n", "--name"), type="character", default="Brunswick", 
+              help="folder name of the downscaled images [default= %default]", metavar="character"),
+  make_option(c("-y", "--year"), type="integer", default=NULL, 
+              help="year to process", metavar="character")
+) 
+
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
+
+source_st <- opt$name
+year_st <- opt$year
+
+
+setwd('..')
+
+link <- paste0('./Outputs/Order_files/', source_st)
 setwd(link)
+getwd()
 
-year_st <- 2019
-
-Out_link_1 <- paste0(link,'/Snow_Interpolation/')
+Out_link_1 <- './Snow_Interpolation/'
 Out_dir_1 = dir.create(paste0(Out_link_1,year_st))
 
-Out_link_2 <- paste0(Out_link_1, year_st)
-Out_dir_2 = dir.create(Out_link_2)
+#Out_link_2 <- paste0(Out_link_1, year_st)
+#Out_dir_2 = dir.create(Out_link_2)
 
-Out_link_3 <- paste0(Out_link_1, year_st)
-Out_dir_3 = dir.create(Out_link_3)
+#Out_link_3 <- paste0(Out_link_1, year_st)
+#Out_dir_3 = dir.create(Out_link_3)
 
-## raster de referencia
-
-
-link_r <- '/home/franciscoaguirre/Documents/Data/Data_modis/Order_files/Brunswick/Downscaling/Brunswick_mesma_albedo/2015/'
+## Referent raster, to have the correct dimensions!! ########
+link_r <- paste0('./Mesma_albedo/',year_st)
 mesma_alb_268 <- brick(paste0(link_r,'/','2015_268_mesma_albedo.tif'))
 names(mesma_alb_268) <- c('fraction', 'g_size', 'ndsi', 'madi','s_mask','albedo')
 #names(high_atk_GLS) <- c('band_1','band_2','band_3', 'band_4', 'band_5', 'band_6', 'band_7','elevation',
@@ -37,7 +59,7 @@ names(mesma_alb_268) <- c('fraction', 'g_size', 'ndsi', 'madi','s_mask','albedo'
 #plot(dem_250_r)
 
 
-mesma_file <- readLines(paste0('Brunswick_mesma_albedo/',year_st,'/',year_st,'_mesma_alb.txt'))
+mesma_file <- readLines(paste0('Mesma_albedo/',year_st,'/',year_st,'_mesma_alb.txt'))
 
 days <- length(mesma_file)
 
@@ -64,7 +86,7 @@ for( s in 1:(day_i+1)){
     day_l[[i]] <- substr(mesma_file[i+d], 6, 8)
     date_l[[i]] <- as.Date(as.numeric(day_l[[i]]), origin = as.Date(paste0((year_st-1),'-12-31')))
     #Read the rasters
-    mesma_i <- brick(paste0('Brunswick_mesma_albedo/',year_st,'/',mesma_file[i+d]))
+    mesma_i <- brick(paste0('Mesma_albedo/',year_st,'/',mesma_file[i+d]))
     names(mesma_i) <- c('fraction', 'g_size', 'ndsi', 'madi','s_mask','albedo')
     
     # revisa mismas dimenciones en los rasters
@@ -106,7 +128,7 @@ for( s in 1:(day_i+1)){
   ## Genera spatial
   sp.frame <- Snow_st.p.frame[,16:17]
   coordinates(sp.frame ) <- ~x+y
-  proj4string(sp.frame ) <- CRS("+init=epsg:32719")
+  proj4string(sp.frame ) <- CRS('EPSG:32719')
   
   sn_f.frame <- Snow_st.p.frame[,1:15]
   sn_alb.frame <- Snow_al.st.p.frame[,1:15]
@@ -129,11 +151,11 @@ for( s in 1:(day_i+1)){
   
   frame_sf.r <- data.frame(Snow_st.p.frame[,16:17],data_sf_7[,1:15])
   coordinates(frame_sf.r) <- ~x+y
-  proj4string(frame_sf.r) <- CRS("+init=epsg:32719")
+  proj4string(frame_sf.r) <- CRS('EPSG:32719')
   
   # Arma el raster
   Snow_f_r_7 <- rasterFromXYZ(frame_sf.r[,7])
-  crs(Snow_f_r_7) <- "+init=epsg:32719"
+  crs(Snow_f_r_7) <- 'EPSG:32719'
   rast_1[[s]] <- Snow_f_r_7
   
   ## Interpolación Snow Albedo
@@ -146,11 +168,11 @@ for( s in 1:(day_i+1)){
   
   frame_sa.r <- data.frame(Snow_st.p.frame[,16:17],data_sa_7[,1:15])
   coordinates(frame_sa.r) <- ~x+y
-  proj4string(frame_sa.r) <- CRS("+init=epsg:32719")
+  proj4string(frame_sa.r) <- CRS('EPSG:32719')
   
   # Arma el raster
   Snow_al_r_7 <- rasterFromXYZ(frame_sa.r[,7])
-  crs(Snow_al_r_7) <- "+init=epsg:32719"
+  crs(Snow_al_r_7) <- 'EPSG:32719'
   rast_2[[s]] <- Snow_al_r_7
   
   if(d == 0){
@@ -174,10 +196,10 @@ file_sf_r <-file(paste0(Out_link_1,year_st,'/',year_st,'_snow_fr_alb.txt'))
 writeLines(as.character(structure(day_st,class= 'Date')), file_sf_r)
 close(file_sf_r)
 
-writeRaster(Rast_SF, paste0(Out_link_2,'/',year_st,'_snow_fraction.tif'), 
+writeRaster(Rast_SF, paste0(Out_link_1,'/',year_st,'/',year_st,'_snow_fraction.tif'), 
             format="GTiff", overwrite=TRUE)
 
-writeRaster(Rast_SA, paste0(Out_link_3,'/',year_st,'_snow_albedo.tif'), 
+writeRaster(Rast_SA, paste0(Out_link_1,'/',year_st,'/',year_st,'_snow_albedo.tif'), 
             format="GTiff", overwrite=TRUE)
 
 
