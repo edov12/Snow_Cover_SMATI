@@ -5,7 +5,7 @@ This work responds to the practical packaging of the methodology published in th
 
 The paper ***Snow Cover Reconstruction in the Brunswick Peninsula, Patagonia, Derived from a Combination of the Spectral Fusion, Mixture Analysis, and Temporal Interpolation of MODIS Data*** explores and compares different methodologies to implement a high resolution (spatial and temporal) studies of snow cover at high latitudes enviroments.
 
-*** DOI: https://doi.org/10.3390/rs15225430 ***
+DOI: https://doi.org/10.3390/rs15225430
 
 The main objective of this project is to facilitate the implementation and continuous testing of this methodology, providing everything necessary for its understanding and implementation.
 
@@ -27,16 +27,21 @@ This study was co-funded by the FNDR GORE Magallanes “Programa de Transferenci
 If you use this tool please make reference as:
 
 - **MDPI and ACS Style**
+  
     Aguirre, F.; Bozkurt, D.; Sauter, T.; Carrasco, J.; Schneider, C.; Jaña, R.; Casassa, G. Snow Cover Reconstruction in the Brunswick Peninsula, Patagonia, Derived from a Combination of the Spectral Fusion, Mixture Analysis, and Temporal Interpolation of MODIS Data. Remote Sens. 2023, 15, 5430. https://doi.org/10.3390/rs15225430
 
 - **AMA Style**
+  
     Aguirre F, Bozkurt D, Sauter T, Carrasco J, Schneider C, Jaña R, Casassa G. Snow Cover Reconstruction in the Brunswick Peninsula, Patagonia, Derived from a Combination of the Spectral Fusion, Mixture Analysis, and Temporal Interpolation of MODIS Data. Remote Sensing. 2023; 15(22):5430. https://doi.org/10.3390/rs15225430
 
 - **Chicago/Turabian Style**
+  
     Aguirre, Francisco, Deniz Bozkurt, Tobias Sauter, Jorge Carrasco, Christoph Schneider, Ricardo Jaña, and Gino Casassa. 2023. "Snow Cover Reconstruction in the Brunswick Peninsula, Patagonia, Derived from a Combination of the Spectral Fusion, Mixture Analysis, and Temporal Interpolation of MODIS Data" Remote Sensing 15, no. 22: 5430. https://doi.org/10.3390/rs15225430
 
 ***Tanks***
+
 ***Gracias***
+
 ***Dankeschön***
 
 [def]: https://www.mdpi.com/2072-4292/15/22/5430
