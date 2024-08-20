@@ -47,16 +47,12 @@ Out_dir_1 = dir.create(paste0(Out_link_1,year_st))
 #Out_link_3 <- paste0(Out_link_1, year_st)
 #Out_dir_3 = dir.create(Out_link_3)
 
-## Referent raster, to have the correct dimensions!! ########
+## Referent raster, to have the correct dimensions!! 
+#####
 link_r <- paste0('./Mesma_albedo/',year_st)
 mesma_alb_268 <- brick(paste0(link_r,'/','2015_268_mesma_albedo.tif'))
 names(mesma_alb_268) <- c('fraction', 'g_size', 'ndsi', 'madi','s_mask','albedo')
-#names(high_atk_GLS) <- c('band_1','band_2','band_3', 'band_4', 'band_5', 'band_6', 'band_7','elevation',
-#'slope','aspect','zenith','cloud_mask')
-
-#dem_250_r <- resample(Dem_30_r, high_atk_GLS$band_1, method='bilinear')
-
-#plot(dem_250_r)
+#####
 
 
 mesma_file <- readLines(paste0('Mesma_albedo/',year_st,'/',year_st,'_mesma_alb.txt'))
