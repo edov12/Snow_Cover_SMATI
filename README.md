@@ -38,7 +38,7 @@ If you use this tool please make reference as:
   
     Aguirre, Francisco, Deniz Bozkurt, Tobias Sauter, Jorge Carrasco, Christoph Schneider, Ricardo Jaña, and Gino Casassa. 2023. "Snow Cover Reconstruction in the Brunswick Peninsula, Patagonia, Derived from a Combination of the Spectral Fusion, Mixture Analysis, and Temporal Interpolation of MODIS Data" Remote Sensing 15, no. 22: 5430. https://doi.org/10.3390/rs15225430
 
-***Tanks***
+***Thanks***
 
 ***Gracias***
 
