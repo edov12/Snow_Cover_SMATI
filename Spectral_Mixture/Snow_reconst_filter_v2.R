@@ -30,7 +30,7 @@ setwd(link)
 
 year <- opt$year
 
-Out_link <- paste0('./Brunswick_mesma_albedo/',year)
+Out_link <- paste0('./Mesma_albedo/',year)
 Out_dir = dir.create(Out_link)
 
 down_file <- readLines(paste0('./Downscaling_files/', year,'/',year,'_downcaling.txt'))
