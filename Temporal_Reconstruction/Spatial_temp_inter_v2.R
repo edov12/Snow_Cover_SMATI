@@ -30,12 +30,6 @@ getwd()
 Out_link_1 <- './Snow_Interpolation/'
 Out_dir_1 = dir.create(paste0(Out_link_1,year_st))
 
-#Out_link_2 <- paste0(Out_link_1, year_st)
-#Out_dir_2 = dir.create(Out_link_2)
-
-#Out_link_3 <- paste0(Out_link_1, year_st)
-#Out_dir_3 = dir.create(Out_link_3)
-
 ## Referent raster, to have the correct dimensions!! 
 #####
 link_r <- paste0('./Mesma_albedo/',year_st)
