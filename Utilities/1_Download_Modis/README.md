@@ -7,6 +7,16 @@
 3. More information can be found at [LAADS Web Service Classic Quick Start Guide] (https://ladsweb.modaps.eosdis.nasa.gov/tools-and-services/lws-classic/quick-start)
 
 >## To Download the order requested:
+>### Using wget
+**Run in the terminal:**
+
+    wget -e robots=off -m -np -R .html,.tmp -nH --cut-dirs=3
+    "https://ladsweb.modaps.eosdis.nasa.gov/archive/orders/50227xxxx/"
+    --header "Authorization: Bearer <YOUR_EDL_TOKEN>" -P <target dir>
+1. Bearer <YOUR_EDL_TOKEN>, Use app token TOK to authenticate form [Generate a Bearer Token](https://urs.earthdata.nasa.gov/users/)
+2. -P <target dir>, destination DIR, Store directory structure in DIR. Can you download directicly in the folder where run this intruction: -P .
+
+>### Using python
 **Run in the terminal:**
 
     python laads-data-download.py -s <URL> -d <DIR> -t <TOK>
