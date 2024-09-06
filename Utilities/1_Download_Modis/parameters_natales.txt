@@ -5,6 +5,6 @@
 #Example: your_account	year	north	south	west	east	start_time	end_time	format	projection
 #ParameterList:
 # Number of year to download: init_year (initial year); final_year: (final year). Not request more than 10 years in a single request!
-init_year:	2001
-final_year:	2003
+init_year:	2008
+final_year:	2008
 ingeofa@gmail.com	-51.25	-51.57	-73.1	-72.48	Apr 01	Oct 31	tiff	GEO
