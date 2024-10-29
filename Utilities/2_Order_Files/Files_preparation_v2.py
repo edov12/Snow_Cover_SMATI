@@ -34,7 +34,7 @@ def _order(source, dest_1, year, check_name):
         destination = os.chdir("..")
         destination = os.chdir("..")
         #path_d = './Outputs/Order_files/' + destination + '/Reflectance_bands'
-        destination = os.chdir('./Outputs/Order_files/' + dest_1 + '/Reflectance_bands') # destination by default
+        destination = os.chdir('./DATA/' + dest_1 + '/Reflectance_bands') # destination by default
         destination = os.getcwd()
         #print(dest_1)
 
@@ -44,7 +44,7 @@ def _order(source, dest_1, year, check_name):
         #destination = os.chdir("..")
         destination = os.chdir("..")
         destination = os.chdir("..")
-        destination = os.chdir('./Outputs/Order_files/' + dest_1 + '/Reflectance_bands') # destination by default
+        destination = os.chdir('./DATA/' + dest_1 + '/Reflectance_bands') # destination by default
         destination = os.getcwd()
         
         
