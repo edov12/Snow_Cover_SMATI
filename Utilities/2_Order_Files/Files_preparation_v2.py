@@ -14,9 +14,9 @@ def _order(source, dest_1, year, check_name):
     folder_MOD09GA = 'MOD09GA'
     folder_MOD09GQ = 'MOD09GQ'
     folder_MOD35 = 'MOD35'
-    #Folder_1 = 'Brunswick_Final'
+    #Folder_1 = 'Ferrier_Final'
     #Folder_2 = year
-    #Folder_3 = 'Brunswick'
+    #Folder_3 = 'Ferrier'
     #archivolec = 'checksums_502266192' # Comment after the test!
 
     File_ord = 'Order_files'
@@ -26,7 +26,7 @@ def _order(source, dest_1, year, check_name):
         source = source_1
         #source_2 = source_1
         source = os.chdir("..")
-        source = os.chdir('./4_Example_Data/Brunswick/' + year)
+        source = os.chdir('./4_Example_Data/Ferrier/' + year)
         source = os.getcwd()
         
         destination = os.chdir("..")
